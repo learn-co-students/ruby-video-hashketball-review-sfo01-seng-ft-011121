@@ -127,4 +127,123 @@ def game_hash
   }
 end
 
-# Write code here
+def get_players(team_name)
+  hash = game_hash
+  hash.each do |region, team|
+    if team[:team_name] == team_name
+      return team[:players]
+    end
+  end
+end
+
+def get_all_players
+  hash = game_hash
+  hash[:home][:players].concat(hash[:away][:players])
+end
+
+def num_points_scored(name)
+  players = get_all_players
+  players.each do |player|
+    return player[:points] if player[:player_name] == name
+  end
+end
+
+def shoe_size(name)
+  players = get_all_players
+  players.each { |player| return player[:shoe] if player[:player_name] == name }
+end
+
+def team_colors(team_name)
+  hash = game_hash
+  hash.each do |region, team|
+    return team[:colors] if team[:team_name] == team_name
+  end
+end
+
+def team_names
+  arr = []
+  hash = game_hash
+  hash.each { |region, team| arr << team[:team_name] }
+  arr
+end
+
+def player_numbers(team_name)
+  numbers = []
+  players = get_players(team_name)
+  players.each { |player| numbers << player[:number] }
+  numbers
+end
+
+def player_stats(name)
+  players = get_all_players
+  players.each do |player|
+    if player[:player_name] == name
+      return player
+    end
+  end
+end
+
+def big_shoe_rebounds
+  players = get_all_players
+  max_size = 0
+  max_idx = 0
+  players.each_with_index do |player, i|
+    if player[:shoe] > max_size
+      max_size = player[:shoe]
+      max_idx = i
+    end
+  end
+  return players[max_idx][:rebounds]
+end
+
+def most_points_scored
+  players = get_all_players
+  max = 0
+  max_idx = 0
+  players.each_with_index do |player, i|
+    if player[:points] > max
+      max = player[:points]
+      max_idx = i
+    end
+  end
+  return players[max_idx][:player_name]
+end
+
+def total_points_scored(team)
+  players = get_players(team)
+  total = 0
+  players.each { |player| total += player[:points] }
+  return total
+end
+
+def winning_team
+  total_points_scored("Brooklyn Nets") > total_points_scored("Charlotte Hornets") ? "Brooklyn Nets" : "Charlotte Hornets"
+end
+
+def player_with_longest_name
+  players = get_all_players
+  longest_name = ""
+  players.each do |player|
+    if player[:player_name].length > longest_name.length
+      longest_name = player[:player_name]
+    end
+  end
+  return longest_name
+end
+
+def player_with_most_steals
+  players = get_all_players
+  max_steals = 0
+  max_idx = 0
+  players.each_with_index do |player, i|
+    if player[:steals] > max_steals
+      max_steals = player[:steals]
+      max_idx = i
+    end
+  end
+  return players[max_idx][:player_name]
+end
+
+def long_name_steals_a_ton?
+  return player_with_longest_name == player_with_most_steals
+end
