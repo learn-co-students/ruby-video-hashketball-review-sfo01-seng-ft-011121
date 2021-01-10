@@ -127,4 +127,80 @@ def game_hash
   }
 end
 
-# Write code here
+def num_points_scored(name)
+  game_hash.each do |ha, tcp|
+    tcp[:players].each do |player_hash|
+      if player_hash[:player_name] == name
+        return player_hash[:points]
+      end
+    end
+  end
+end
+
+def shoe_size(name)
+  game_hash.each do |ha, tcp|
+    tcp[:players].each do |player_hash|
+      if player_hash[:player_name] == name
+        return player_hash[:shoe]
+      end
+    end
+  end
+end
+
+def team_colors(team)
+  game_hash.each do |ha, tcp|
+    if tcp[:team_name] == team
+      return tcp[:colors]
+    end
+  end
+end
+
+def team_names
+  teams = []
+  game_hash.each do |ha, tcp|
+    teams << tcp[:team_name]
+  end
+  return teams
+end
+
+def player_numbers(team)
+  team_numbers = []
+  game_hash.each do |ha, tcp|
+    if tcp[:team_name] == team
+      tcp[:players].each do |player_hash|
+        team_numbers << player_hash[:number]
+      end
+    end
+  end
+  return team_numbers
+end
+
+def player_stats(name)
+  game_hash.each do |ha, tcp|
+    tcp[:players].each do |player_hash|
+      if player_hash[:player_name] == name
+        return player_hash
+      end
+    end
+  end
+end
+
+def big_shoe_rebounds
+  largest = 0
+  player_largest_shoe = ""
+  game_hash.each do |ha, tcp|
+    tcp[:players].each do |player_hash|
+      if player_hash[:shoe] > largest
+        largest = player_hash[:shoe]
+        player_largest_shoe = player_hash[:player_name]
+      end
+    end
+  end
+  game_hash.each do |ha, tcp|
+    tcp[:players].each do |player_hash|
+      if player_hash[:player_name] == player_largest_shoe
+        return player_hash[:rebounds]
+      end
+    end
+  end
+end
